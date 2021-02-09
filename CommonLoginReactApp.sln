@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLoginReactApp", "CommonLoginReactApp\CommonLoginReactApp.csproj", "{ED916D79-ABA1-49D8-B38D-F6D68D002CCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLoginReactApp.BLL", "CommonLoginReactApp.BLL\CommonLoginReactApp.BLL.csproj", "{AB39AE90-1333-455D-9C97-E9CC8E4CEB09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLoginReactApp.DAL", "CommonLoginReactApp.DAL\CommonLoginReactApp.DAL.csproj", "{7FAC985C-F1AA-430C-9674-3DC461F86A74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A0AA1FF5-DA43-480F-A554-552FCF955D0D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED916D79-ABA1-49D8-B38D-F6D68D002CCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED916D79-ABA1-49D8-B38D-F6D68D002CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED916D79-ABA1-49D8-B38D-F6D68D002CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED916D79-ABA1-49D8-B38D-F6D68D002CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB39AE90-1333-455D-9C97-E9CC8E4CEB09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB39AE90-1333-455D-9C97-E9CC8E4CEB09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB39AE90-1333-455D-9C97-E9CC8E4CEB09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB39AE90-1333-455D-9C97-E9CC8E4CEB09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FAC985C-F1AA-430C-9674-3DC461F86A74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FAC985C-F1AA-430C-9674-3DC461F86A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FAC985C-F1AA-430C-9674-3DC461F86A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FAC985C-F1AA-430C-9674-3DC461F86A74}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F5DFA525-D890-4364-81D5-7E18601953DB}
+	EndGlobalSection
+EndGlobal

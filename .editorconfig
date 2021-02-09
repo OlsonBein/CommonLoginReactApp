@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# SA1200: Using directives must be placed correctly
+dotnet_diagnostic.SA1200.severity = none
+
+# SA1652: Enable XML documentation output
+dotnet_diagnostic.SA1652.severity = none
+
+# SA1633: File must have header
+dotnet_diagnostic.SA1633.severity = none
