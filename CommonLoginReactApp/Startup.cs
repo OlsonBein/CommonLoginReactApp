@@ -5,6 +5,7 @@ using CommonLoginReactApp.DAL.ApplicationContext;
 using CommonLoginReactApp.DAL.Entities;
 using CommonLoginReactApp.DAL.Interfaces;
 using CommonLoginReactApp.DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -32,6 +33,8 @@ namespace CommonLoginReactApp
                     this.Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationContext>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
