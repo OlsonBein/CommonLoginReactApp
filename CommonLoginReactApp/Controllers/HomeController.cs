@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CommonLoginReactApp.Controllers
 {
@@ -6,6 +7,7 @@ namespace CommonLoginReactApp.Controllers
     [ApiController]
     public class HomeController : Controller
     {
+        [Authorize]
         [HttpGet("closedEndpoint")]
         public IActionResult Index()
         {

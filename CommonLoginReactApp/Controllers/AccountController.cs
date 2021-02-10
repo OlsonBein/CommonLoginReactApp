@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using CommonLoginReactApp.BLL.Interfaces;
 using CommonLoginReactApp.BLL.Models;
-using CommonLoginReactApp.DAL.Constants;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +16,12 @@ namespace CommonLoginReactApp.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService accountService;
+        private readonly IHttpClientFactory httpClientFactory;
 
-        public AccountController(IAccountService service)
+        public AccountController(IAccountService service, IHttpClientFactory httpClientFactory)
         {
             this.accountService = service;
+            this.httpClientFactory = httpClientFactory;
         }
 
         [HttpPost("registration")]
@@ -39,27 +40,25 @@ namespace CommonLoginReactApp.Controllers
                 return this.Ok(applicationUser);
             }
 
-            var id = this.CreateClaims(applicationUser.Email);
-            await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            var authClient = this.httpClientFactory.CreateClient();
+            var discoveryDocument = await authClient.GetDiscoveryDocumentAsync("https://localhost:44331/");
+            var tokenResponse = await authClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            {
+                Address = discoveryDocument.TokenEndpoint,
+                ClientId = "client_id",
+                ClientSecret = "secret",
+                Scope = "apiscope"
+            });
+            authClient.SetBearerToken(tokenResponse.AccessToken);
+            this.HttpContext.Response.Cookies.Append("accessToken", tokenResponse.AccessToken);
             return this.Ok(applicationUser);
         }
 
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await this.accountService.LogOutAsync();
             return this.Ok();
-        }
-
-        private ClaimsIdentity CreateClaims(string email)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, email),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, RoleConstants.User)
-            };
-            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            return id;
         }
     }
 }
