@@ -1,8 +1,8 @@
-﻿using IdentityModel.Client;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace CommonLoginReactApp.Controllers
 {
@@ -18,25 +18,33 @@ namespace CommonLoginReactApp.Controllers
         }
 
         [HttpGet("secret")]
-        public async Task<IActionResult> GetSecret()
+        public async Task<IActionResult> Secret()
         {
-            var authClient = this.httpClientFactory.CreateClient();
-            var discoveryDocument = await authClient.GetDiscoveryDocumentAsync("https://localhost:44331/");
+            var authClient = new HttpClient();
+            var discoveryDocument = await authClient.GetDiscoveryDocumentAsync("https://localhost:10001/");
             var tokenResponse = await authClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = discoveryDocument.TokenEndpoint,
                 ClientId = "client_id",
-                ClientSecret = "secret",
-                Scope = "apiscope"
+                ClientSecret = "client_secret",
+                Scope = "HomeAPI"
             });
-            authClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var response = await authClient.GetAsync("https://localhost:44331/api/home/closedEndpoint");
+            var homeClient = new HttpClient();
+            homeClient.SetBearerToken(tokenResponse.AccessToken);
+
+            var response = await homeClient.GetAsync("https://localhost:44331/api/home/closedEndpoint");
+            if (!response.IsSuccessStatusCode)
+            {
+                return this.Ok(response.StatusCode);
+            }
+
             var message = await response.Content.ReadAsStringAsync();
             return this.Ok(message);
         }
 
         [HttpGet("closedEndpoint")]
+        [Authorize]
         public string ClosedEndpoint()
         {
             return "Congratulations, you got here!";

@@ -1,7 +1,6 @@
 using CommonLoginReactApp.BLL.Interfaces;
 using CommonLoginReactApp.BLL.Managers;
 using CommonLoginReactApp.BLL.Services;
-using CommonLoginReactApp.Configs;
 using CommonLoginReactApp.DAL.ApplicationContext;
 using CommonLoginReactApp.DAL.Entities;
 using CommonLoginReactApp.DAL.Interfaces;
@@ -39,20 +38,19 @@ namespace CommonLoginReactApp
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationContext>();
 
-            services.AddIdentityServer()
-             .AddDeveloperSigningCredential()
-             .AddInMemoryIdentityResources(Config.GetIdentityResources())
-             .AddInMemoryApiResources(Config.GetApiResources())
-             .AddInMemoryClients(Config.GetClients());
-
             services.AddAuthentication("Bearer")
             .AddJwtBearer("Bearer", options =>
             {
-                options.Authority = "https://localhost:44331";
-                options.Audience = "myresourceapi";
+                options.Authority = "https://localhost:10001";
+                options.Audience = "HomeResource";
             });
-
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("HomeAPI", policy =>
+                {
+                    policy.RequireClaim("scope", "HomeAPI");
+                });
+            });
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
@@ -78,7 +76,6 @@ namespace CommonLoginReactApp
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {

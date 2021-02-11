@@ -9,13 +9,7 @@ namespace CommonLoginReactApp.Configs
         {
             return new List<ApiResource>
             {
-                new ApiResource("myresourceapi", "My Resource API")
-                {
-                    Scopes =
-                    {
-                        new Scope("apiscope")
-                    }
-                }
+                new ApiResource("HomeResource")
             };
         }
 
@@ -38,10 +32,18 @@ namespace CommonLoginReactApp.Configs
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets =
                     {
-                        new Secret("secret".Sha256())
+                        new Secret("client_secret".Sha256())
                     },
-                    AllowedScopes = { "apiscope" }
+                    AllowedScopes = { "HomeAPI" }
                 }
+            };
+        }
+
+        public static IEnumerable<ApiScope> GetApiScopes()
+        {
+            return new List<ApiScope>
+            {
+                new ApiScope("HomeAPI", "Home API")
             };
         }
     }
