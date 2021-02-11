@@ -1,13 +1,7 @@
-﻿using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using CommonLoginReactApp.BLL.Interfaces;
+﻿using CommonLoginReactApp.BLL.Interfaces;
 using CommonLoginReactApp.BLL.Models;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CommonLoginReactApp.Controllers
 {
@@ -16,12 +10,10 @@ namespace CommonLoginReactApp.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService accountService;
-        private readonly IHttpClientFactory httpClientFactory;
 
-        public AccountController(IAccountService service, IHttpClientFactory httpClientFactory)
+        public AccountController(IAccountService service)
         {
             this.accountService = service;
-            this.httpClientFactory = httpClientFactory;
         }
 
         [HttpPost("registration")]
@@ -35,22 +27,6 @@ namespace CommonLoginReactApp.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             var applicationUser = await this.accountService.LogInAsync(model, model.Password);
-            if (applicationUser.Errors.Any())
-            {
-                return this.Ok(applicationUser);
-            }
-
-            var authClient = this.httpClientFactory.CreateClient();
-            var discoveryDocument = await authClient.GetDiscoveryDocumentAsync("https://localhost:44331/");
-            var tokenResponse = await authClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-            {
-                Address = discoveryDocument.TokenEndpoint,
-                ClientId = "client_id",
-                ClientSecret = "secret",
-                Scope = "apiscope"
-            });
-            authClient.SetBearerToken(tokenResponse.AccessToken);
-            this.HttpContext.Response.Cookies.Append("accessToken", tokenResponse.AccessToken);
             return this.Ok(applicationUser);
         }
 

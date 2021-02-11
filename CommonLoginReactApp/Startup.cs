@@ -17,8 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
 
 namespace CommonLoginReactApp
 {
@@ -33,37 +31,27 @@ namespace CommonLoginReactApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddControllers();
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(
                     this.Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationContext>();
+
             services.AddIdentityServer()
              .AddDeveloperSigningCredential()
+             .AddInMemoryIdentityResources(Config.GetIdentityResources())
              .AddInMemoryApiResources(Config.GetApiResources())
              .AddInMemoryClients(Config.GetClients());
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(jwtBearerOptions =>
-                {
-                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("0d5b3235a8b403c3dab9c3f4f65c07fcalskd234n141faza")),
-                        ValidateIssuer = true,
-                        ValidIssuer = "api",
-                        ValidateAudience = true,
-                        ValidAudience = "myresourceapi",
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero
-                    };
-                })
-                .AddCookie();
+
+            services.AddAuthentication("Bearer")
+            .AddJwtBearer("Bearer", options =>
+            {
+                options.Authority = "https://localhost:44331";
+                options.Audience = "myresourceapi";
+            });
+
             services.AddAuthorization();
 
             services.AddScoped<IAccountService, AccountService>();
@@ -88,8 +76,8 @@ namespace CommonLoginReactApp
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
