@@ -5,9 +5,7 @@ using CommonLoginReactApp.DAL.ApplicationContext;
 using CommonLoginReactApp.DAL.Entities;
 using CommonLoginReactApp.DAL.Interfaces;
 using CommonLoginReactApp.DAL.Repositories;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -42,11 +40,9 @@ namespace CommonLoginReactApp
             .AddJwtBearer("Bearer", options =>
             {
                 options.Authority = "https://localhost:10001";
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateAudience = false
-                };
+                options.Audience = "HomeResource";
             });
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("HomeAPI", policy =>

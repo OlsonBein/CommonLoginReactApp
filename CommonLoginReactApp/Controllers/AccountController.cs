@@ -1,7 +1,7 @@
-﻿using CommonLoginReactApp.BLL.Interfaces;
+﻿using System.Threading.Tasks;
+using CommonLoginReactApp.BLL.Interfaces;
 using CommonLoginReactApp.BLL.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace CommonLoginReactApp.Controllers
 {

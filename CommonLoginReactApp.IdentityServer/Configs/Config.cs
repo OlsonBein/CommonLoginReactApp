@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 
 namespace CommonLoginReactApp.Configs
@@ -9,7 +11,10 @@ namespace CommonLoginReactApp.Configs
         {
             return new List<ApiResource>
             {
-                new ApiResource("HomeResource")
+                new ApiResource("HomeResource", "Home API")
+                {
+                    Scopes = { "HomeAPI" }
+                }
             };
         }
 
@@ -30,11 +35,17 @@ namespace CommonLoginReactApp.Configs
                 {
                     ClientId = "client_id",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowOfflineAccess = true,
                     ClientSecrets =
                     {
                         new Secret("client_secret".Sha256())
                     },
-                    AllowedScopes = { "HomeAPI" }
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "HomeAPI"
+                    }
                 }
             };
         }
@@ -43,6 +54,7 @@ namespace CommonLoginReactApp.Configs
         {
             return new List<ApiScope>
             {
+
                 new ApiScope("HomeAPI", "Home API")
             };
         }

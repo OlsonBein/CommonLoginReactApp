@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using CommonLoginReactApp.DAL.Entities;
 using CommonLoginReactApp.DAL.Interfaces;

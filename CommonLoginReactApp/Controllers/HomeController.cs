@@ -10,13 +10,6 @@ namespace CommonLoginReactApp.Controllers
     [ApiController]
     public class HomeController : Controller
     {
-        private readonly IHttpClientFactory httpClientFactory;
-
-        public HomeController(IHttpClientFactory httpClientFactory)
-        {
-            this.httpClientFactory = httpClientFactory;
-        }
-
         [HttpGet("secret")]
         public async Task<IActionResult> Secret()
         {
