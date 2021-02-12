@@ -29,6 +29,10 @@ namespace CommonLoginReactApp.Controllers
                 ClientSecret = "client_secret",
                 Scope = "HomeAPI"
             });
+            if (tokenResponse.IsError)
+            {
+                return this.Ok(tokenResponse.Error);
+            }
 
             var homeClient = new HttpClient();
             homeClient.SetBearerToken(tokenResponse.AccessToken);
@@ -44,7 +48,7 @@ namespace CommonLoginReactApp.Controllers
         }
 
         [HttpGet("closedEndpoint")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public string ClosedEndpoint()
         {
             return "Congratulations, you got here!";

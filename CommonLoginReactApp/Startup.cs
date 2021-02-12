@@ -42,7 +42,10 @@ namespace CommonLoginReactApp
             .AddJwtBearer("Bearer", options =>
             {
                 options.Authority = "https://localhost:10001";
-                options.Audience = "HomeResource";
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false
+                };
             });
             services.AddAuthorization(options =>
             {
